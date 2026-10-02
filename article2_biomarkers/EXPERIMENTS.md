@@ -4,6 +4,9 @@
 - Καλύτερο μοντέλο: kNN (Accuracy 83.3%, F1 0.833, ROC-AUC 0.850)
 - Πλήρης πίνακας: βλ. τερματικό / output
 
+# venv\Scripts\activate
+
+
 # git add .
 # git commit -m "Article 2: baseline models on Coimbra dataset (kNN best, F1=0.833)"
 # git push
