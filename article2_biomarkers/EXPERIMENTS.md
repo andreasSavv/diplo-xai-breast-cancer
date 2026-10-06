@@ -19,3 +19,14 @@
 - Εύρημα: Glucose και Resistin είναι οι 2 πιο σημαντικοί βιοδείκτες σε ΟΛΑ τα μοντέλα
   (kNN, Logistic Regression, SVM, RUSBoost) - συνεπές αποτέλεσμα ανεξαρτήτως αλγορίθμου
 - Output: 8 SHAP plots (bar + beeswarm) στον φάκελο results/
+
+## 6/10/2026 - Article 2 baseline models: πλήρης πίνακας
+- Ξανάτρεξα: train_models.py (ίδια αποτελέσματα με 29/9, αποθηκεύω τον πλήρη πίνακα)
+- Coimbra, test set 24 δείγματα:
+
+| Μοντέλο | Accuracy | Precision | Recall | F1 | ROC-AUC |
+|---|---|---|---|---|---|
+| kNN | 0.8333 | 0.9091 | 0.7692 | 0.8333 | 0.8497 |
+| Logistic Regression | 0.7917 | 0.8333 | 0.7692 | 0.8000 | 0.7692 |
+| SVM (RBF) | 0.7083 | 0.8000 | 0.6154 | 0.6957 | 0.7972 |
+| RUSBoost | 0.6667 | 0.7273 | 0.6154 | 0.6667 | 0.6469 |
