@@ -113,3 +113,19 @@ LIME: μέσος όρος απόλυτων συντελεστών, 24 δείγμ
 Σημείωση: το SVM δίνει Accuracy 0.750 με όριο 0.5 στο predict_proba και 0.708 με predict() (train_models.py), ίδιο ROC-AUC 0.797.
 
 Περιορισμοί: μία εκτέλεση, χωρίς διακύμανση. Το Spearman σε 9 χαρακτηριστικά (Coimbra) είναι θορυβώδες. Δεν έχω ελέγξει τις τιμές του permutation για kNN και RUSBoost στο WDBC.
+
+## 11/10 - Ανάλυση αναπαραστάσεων με CKA (cka_analysis.py)
+
+Linear CKA (Kornblith et al., ICML 2019) ανάμεσα σε στρώματα των MLP (1 και 2 κρυφά στρώματα), Autoencoder και TabNet, σε Coimbra και WDBC. Υπολογισμός σε όλα τα δείγματα (116 και 569), μοντέλα εκπαιδευμένα μόνο στο train. TabNet με early stopping σε 20% του train.
+Αποτελέσματα: results_cka/ (cka_all_layers_*.csv και .png, cka_mlp_seeds_*.csv).
+Έλεγχος ορθότητας: CKA(X,X)=1.000, περιστροφή+κλίμακα=1.000, τυχαίος θόρυβος 0.057 (Coimbra) και 0.013 (WDBC).
+
+Κλίμακα αναφοράς (MLP, 4 seeds): Coimbra μέσος 0.80 (0.67-0.91), WDBC μέσος 0.97 (0.96-0.98).
+
+Ευρήματα:
+- MLP: hidden1 μοιάζει με την είσοδο (0.84 Coimbra, 0.81 WDBC). Στο WDBC hidden1-hidden2 = 0.99 (το δεύτερο στρώμα δεν προσθέτει νέα γεωμετρία).
+- Autoencoder: bottleneck-είσοδος 0.88 (Coimbra, 7 νευρώνες) και 0.57 (WDBC, 3 νευρώνες). Έξοδος AE-MLP: 0.42 (Coimbra), 0.93 (WDBC).
+- TabNet: step1-step2 0.04 (Coimbra), 0.16 (WDBC). decision-έξοδος 0.96 και 0.94. Έξοδος MLP-TabNet 0.83 και 0.77.
+
+Περιορισμοί: μία εκτέλεση. CKA πάνω σε όλα τα δείγματα, και σε αυτά που είδε το μοντέλο στην εκπαίδευση. Λίγες διαστάσεις στο bottleneck και στο TabNet. Για έξοδο 1 διάστασης το linear CKA = τετράγωνο συσχέτισης. Δεν εφαρμόζεται σε μοντέλα χωρίς στρώματα (kNN, SVM, Logistic Regression, RUSBoost, GRNN). Το CKA δεν λέει ποια αναπαράσταση είναι καλύτερη.
+Σημείωση: το TabNet με early stopping σε validation set έδωσε Accuracy 0.875 στο Coimbra σε αυτό το τρέξιμο (μία εκτέλεση, δεν χρησιμοποιείται).
