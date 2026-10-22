@@ -1,43 +1,50 @@
 # EXPERIMENTS - Article 2 Deep Learning models
 
 ## 1/10/2026 - GRNN
-- Έτρεξα: grnn.py (custom υλοποίηση, δοκιμή sigma: 0.5, 1.0, 1.5, 2.0, 3.0, 5.0)
-- Καλύτερο: sigma=2.0 -> Accuracy 66.7%, F1 0.733, ROC-AUC 0.783
-- Σύγκριση: χειρότερο από kNN (83.3%) και Logistic Regression (79.2%),
-  καλύτερο ROC-AUC από RUSBoost
 
-  
+* Έτρεξα: grnn.py (custom υλοποίηση, δοκιμή sigma: 0.5, 1.0, 1.5, 2.0, 3.0, 5.0)
+* Καλύτερο: sigma=2.0 -> Accuracy 66.7%, F1 0.733, ROC-AUC 0.783
+* Σύγκριση: χειρότερο από kNN (83.3%) και Logistic Regression (79.2%),
+καλύτερο ROC-AUC από RUSBoost
+
+
+
 ## 2/10/2026 - MLP
-- Έτρεξα: mlp.py (sklearn MLPClassifier, δοκιμή 4 αρχιτεκτονικών)
-- Καλύτερη: 1 κρυφό επίπεδο, 20 νευρώνες -> Accuracy 75.0%, F1 0.750, ROC-AUC 0.818
-- Σύγκριση: 3ο καλύτερο από τα μοντέλα μέχρι τώρα (μετά kNN, Logistic Regression)
-- Παρατήρηση: το πιο "deep" δίκτυο (2 επίπεδα) δεν ήταν καλύτερο - πιθανό
-  overfitting λόγω μικρού dataset (92 train samples)
 
-  
+* Έτρεξα: mlp.py (sklearn MLPClassifier, δοκιμή 4 αρχιτεκτονικών)
+* Καλύτερη: 1 κρυφό επίπεδο, 20 νευρώνες -> Accuracy 75.0%, F1 0.750, ROC-AUC 0.818
+* Σύγκριση: 3ο καλύτερο από τα μοντέλα μέχρι τώρα (μετά kNN, Logistic Regression)
+* Παρατήρηση: το πιο "deep" δίκτυο (2 επίπεδα) δεν ήταν καλύτερο - πιθανό
+overfitting λόγω μικρού dataset (92 train samples)
+
+
+
 ## 2/10/2026 - Autoencoder-based classifier
-- Έτρεξα: autoencoder.py (MLPRegressor ως autoencoder + LogisticRegression classifier
-  πάνω στο bottleneck, δοκιμή bottleneck size: 3, 5, 7)
-- Καλύτερο: bottleneck=7 -> Accuracy 66.7%, F1 0.692, ROC-AUC 0.748
-  (reconstruction MSE 0.207 - το χαμηλότερο, δηλαδή η καλύτερη ανακατασκευή)
-- Παρατήρηση: χειρότερα από τα απλούστερα μοντέλα (kNN, LogReg, MLP) - λογικό,
-  καθώς η τεχνική συμπίεσης αποδίδει συνήθως καλύτερα σε datasets με πολλά
-  περισσότερα χαρακτηριστικά (π.χ. γονιδιακά δεδομένα), όχι σε 9 βιοδείκτες
+
+* Έτρεξα: autoencoder.py (MLPRegressor ως autoencoder + LogisticRegression classifier
+πάνω στο bottleneck, δοκιμή bottleneck size: 3, 5, 7)
+* Καλύτερο: bottleneck=7 -> Accuracy 66.7%, F1 0.692, ROC-AUC 0.748
+(reconstruction MSE 0.207 - το χαμηλότερο, δηλαδή η καλύτερη ανακατασκευή)
+* Παρατήρηση: χειρότερα από τα απλούστερα μοντέλα (kNN, LogReg, MLP) - λογικό,
+καθώς η τεχνική συμπίεσης αποδίδει συνήθως καλύτερα σε datasets με πολλά
+περισσότερα χαρακτηριστικά (π.χ. γονιδιακά δεδομένα), όχι σε 9 βιοδείκτες
 
   ## TabNet (Deep Learning, built-in attention-based interpretability)
 
-Ρυθμίσεις: n_d=4, n_a=4, n_steps=2, batch_size=16, patience=60
+Ρυθμίσεις: n\_d=4, n\_a=4, n\_steps=2, batch\_size=16, patience=60
 (μικρή χωρητικότητα, προσαρμοσμένη για μικρό dataset)
 
 Αποτελέσματα (test set, 24 δείγματα):
-- Accuracy: 0.750
-- Precision: 0.706
-- Recall: 0.923
-- F1-score: 0.800
-- ROC-AUC: 0.860
-- Best epoch: 22 (early stopping at epoch 82)
+
+* Accuracy: 0.750
+* Precision: 0.706
+* Recall: 0.923
+* F1-score: 0.800
+* ROC-AUC: 0.860
+* Best epoch: 22 (early stopping at epoch 82)
 
 Ενσωματωμένη σημαντικότητα χαρακτηριστικών (attention-based):
+
 1. Resistin (0.296)
 2. Glucose (0.274)
 3. BMI (0.176)
@@ -55,29 +62,32 @@
 Με αυτό ολοκληρώθηκαν και τα 4 deep learning μοντέλα (GRNN, MLP,
 Autoencoder, TabNet) που ζήτησε ο επιβλέποντας στη συνάντηση 01/10/2026.
 
-## 6/10 - XAI στα 4 deep learning μοντέλα (xai_dl.py)
+## 6/10 - XAI στα 4 deep learning μοντέλα (xai\_dl.py)
 
 Τεχνικές: SHAP KernelExplainer (background 30 δείγματα), permutation importance (30 επαναλήψεις, πτώση ROC-AUC), attention του TabNet.
-Αποτελέσματα στον φάκελο results_xai/ (PNG και CSV). Τα μοντέλα είναι του πρώτου χωρισμού.
+Αποτελέσματα στον φάκελο results\_xai/ (PNG και CSV). Τα μοντέλα είναι του πρώτου χωρισμού.
 
 Coimbra:
-- Glucose και BMI στο top-5 του SHAP και των 4 μοντέλων. Resistin σε 3 από τα 4.
-- Το permutation βάζει την Age στο top-5 και των 4 μοντέλων, ενώ το SHAP την βάζει 4η-6η. Οι τεχνικές διαφωνούν.
-- Insulin, HOMA και Glucose είναι συσχετισμένα (το HOMA υπολογίζεται από τα δύο άλλα), οπότε η σειρά τους διαβάζεται με επιφύλαξη.
-- Το αποτέλεσμα του BMI (υψηλές τιμές προς "υγιής") δεν συμφωνεί με την κλινική προσδοκία. Πιθανώς χαρακτηρίζει το μικρό δείγμα, δεν το γενικεύω.
+
+* Glucose και BMI στο top-5 του SHAP και των 4 μοντέλων. Resistin σε 3 από τα 4.
+* Το permutation βάζει την Age στο top-5 και των 4 μοντέλων, ενώ το SHAP την βάζει 4η-6η. Οι τεχνικές διαφωνούν.
+* Insulin, HOMA και Glucose είναι συσχετισμένα (το HOMA υπολογίζεται από τα δύο άλλα), οπότε η σειρά τους διαβάζεται με επιφύλαξη.
+* Το αποτέλεσμα του BMI (υψηλές τιμές προς "υγιής") δεν συμφωνεί με την κλινική προσδοκία. Πιθανώς χαρακτηρίζει το μικρό δείγμα, δεν το γενικεύω.
 
 WDBC:
-- Κυριαρχούν χαρακτηριστικά μεγέθους (radius, perimeter, area), concave points και texture. Μόνο το worst perimeter είναι στο top-5 του SHAP και των 4 μοντέλων.
-- Το radius/perimeter/area είναι γεωμετρικά συνδεδεμένα: μετράει η ομάδα, όχι ποιο ακριβώς.
-- Το attention του TabNet διαφωνεί με το SHAP και το permutation (perimeter error 0.318 αλλά εκτός top-5 των άλλων τεχνικών. Το worst concave points είναι 2ο σε SHAP και permutation αλλά έχει attention 0).
+
+* Κυριαρχούν χαρακτηριστικά μεγέθους (radius, perimeter, area), concave points και texture. Μόνο το worst perimeter είναι στο top-5 του SHAP και των 4 μοντέλων.
+* Το radius/perimeter/area είναι γεωμετρικά συνδεδεμένα: μετράει η ομάδα, όχι ποιο ακριβώς.
+* Το attention του TabNet διαφωνεί με το SHAP και το permutation (perimeter error 0.318 αλλά εκτός top-5 των άλλων τεχνικών. Το worst concave points είναι 2ο σε SHAP και permutation αλλά έχει attention 0).
 
 Περιορισμοί: permutation στο ίδιο test set, χωρίς μέτρηση διακύμανσης. SHAP στο WDBC σε 40 από τα 114 δείγματα. Δείχνουν σε τι βασίζεται το μοντέλο, όχι αιτιότητα.
 
 
-## 6/10 - 5-fold cross-validation, 8 μοντέλα, 2 datasets (cv_all_models.py)
 
-Στρατοποιημένο 5-fold (random_state=42). Scaler ανά fold. GRNN sigma, MLP αρχιτεκτονική και Autoencoder bottleneck επιλέγονται με εσωτερικό 3-fold CV (ROC-AUC) μέσα στα δεδομένα εκπαίδευσης. Το TabNet κάνει early stopping σε 20% των δεδομένων εκπαίδευσης. Τα κλασικά μοντέλα χωρίς tuning.
-Αποτελέσματα: results_cv/ (per_fold και summary CSV).
+## 6/10 - 5-fold cross-validation, 8 μοντέλα, 2 datasets (cv\_all\_models.py)
+
+Στρατοποιημένο 5-fold (random\_state=42). Scaler ανά fold. GRNN sigma, MLP αρχιτεκτονική και Autoencoder bottleneck επιλέγονται με εσωτερικό 3-fold CV (ROC-AUC) μέσα στα δεδομένα εκπαίδευσης. Το TabNet κάνει early stopping σε 20% των δεδομένων εκπαίδευσης. Τα κλασικά μοντέλα χωρίς tuning.
+Αποτελέσματα: results\_cv/ (per\_fold και summary CSV).
 
 Coimbra (116 δείγματα): Accuracy μέσος ± απόκλιση
 kNN 0.784 ± 0.081 | SVM 0.750 ± 0.085 | Autoencoder 0.742 ± 0.051 | MLP 0.707 ± 0.097 | Logistic Regression 0.699 ± 0.083 | GRNN 0.699 ± 0.064 | RUSBoost 0.698 ± 0.092 | TabNet 0.671 ± 0.138
@@ -87,45 +97,82 @@ WDBC (569 δείγματα): Accuracy μέσος ± απόκλιση
 MLP 0.977 ± 0.010 | Logistic Regression 0.974 ± 0.019 | SVM 0.965 ± 0.021 | kNN 0.963 ± 0.020 | RUSBoost 0.960 ± 0.016 | Autoencoder 0.960 ± 0.022 | TabNet 0.958 ± 0.013 | GRNN 0.939 ± 0.026
 
 Συμπεράσματα:
-- Coimbra: οι αποκλίσεις (5-14%) είναι ίδιου μεγέθους με τις διαφορές των μοντέλων, άρα δεν ξεχωρίζει σαφώς κανένα.
-- Το πλεονέκτημα του TabNet στον ένα χωρισμό δεν επιβεβαιώθηκε (βγήκε τελευταίο, ασταθές).
-- WDBC: όλα 94-98%. Τα deep learning δεν ξεπερνούν σαφώς τη Logistic Regression.
-- Η βελτίωση Coimbra → WDBC παρατηρείται και στα κλασικά μοντέλα, άρα οφείλεται στο dataset και όχι στα deep learning.
+
+* Coimbra: οι αποκλίσεις (5-14%) είναι ίδιου μεγέθους με τις διαφορές των μοντέλων, άρα δεν ξεχωρίζει σαφώς κανένα.
+* Το πλεονέκτημα του TabNet στον ένα χωρισμό δεν επιβεβαιώθηκε (βγήκε τελευταίο, ασταθές).
+* WDBC: όλα 94-98%. Τα deep learning δεν ξεπερνούν σαφώς τη Logistic Regression.
+* Η βελτίωση Coimbra → WDBC παρατηρείται και στα κλασικά μοντέλα, άρα οφείλεται στο dataset και όχι στα deep learning.
 
 Περιορισμοί: μία επανάληψη 5-fold. Σταθερές ρυθμίσεις TabNet που επέλεξα βλέποντας τον πρώτο χωρισμό. Στο Coimbra το early stopping γίνεται σε validation set 18-19 δειγμάτων. Κλασικά μοντέλα χωρίς tuning. Το XAI δεν έγινε ανά fold.
 
-## 6/10 - XAI και στα 8 μοντέλα: SHAP, permutation, LIME (xai_all_models.py)
+## 6/10 - XAI και στα 8 μοντέλα: SHAP, permutation, LIME (xai\_all\_models.py)
 
 Ίδιες τρεις τεχνικές και στα 8 μοντέλα (4 ML + 4 DL), σε Coimbra και WDBC, στα μοντέλα του πρώτου χωρισμού.
-LIME: μέσος όρος απόλυτων συντελεστών, 24 δείγματα test (Coimbra) και 40 από 114 (WDBC), 1000 δείγματα ανά εξήγηση, random_state=42.
-Αποτελέσματα: results_xai_all/ (shap_, permutation_, lime_, agreement_ CSV και bar plots SHAP).
+LIME: μέσος όρος απόλυτων συντελεστών, 24 δείγματα test (Coimbra) και 40 από 114 (WDBC), 1000 δείγματα ανά εξήγηση, random\_state=42.
+Αποτελέσματα: results\_xai\_all/ (shap\_, permutation\_, lime\_, agreement\_ CSV και bar plots SHAP).
 
 Συμφωνία τεχνικών (Spearman ρ):
-- Coimbra: SHAP-LIME 0.68-0.93, SHAP-Permutation 0.48-0.82, Permutation-LIME 0.10-0.78.
-- WDBC: SHAP-LIME 0.89-0.95. Το permutation διαφωνεί στα kNN (ρ 0.01), GRNN (0.16), RUSBoost (0.30).
+
+* Coimbra: SHAP-LIME 0.68-0.93, SHAP-Permutation 0.48-0.82, Permutation-LIME 0.10-0.78.
+* WDBC: SHAP-LIME 0.89-0.95. Το permutation διαφωνεί στα kNN (ρ 0.01), GRNN (0.16), RUSBoost (0.30).
 
 Ευρήματα:
-- Coimbra: Glucose στο top-5 σε 23/24 περιπτώσεις (8 μοντέλα x 3 τεχνικές), BMI σε 22/24. Resistin στο top-5 και των τριών τεχνικών σε όλα εκτός από τον Autoencoder (κυριαρχούν HOMA και Insulin).
-- Age: στο top-5 του permutation σε 7/8 μοντέλα, του SHAP σε 6/8, του LIME μόνο στο kNN. Δεν μπορώ να πω ποια τεχνική έχει δίκιο (24 δείγματα test).
-- RUSBoost (Coimbra): SHAP μη μηδενικό μόνο σε 3 χαρακτηριστικά, το 4ο-5ο της λίστας είναι ισοβαθμίες.
-- WDBC: τουλάχιστον ένα χαρακτηριστικό μεγέθους (radius/perimeter/area) στο top-5 του SHAP και των 8 μοντέλων. worst texture σε 7/8, worst concave points σε 6/8.
 
-Σημείωση: το SVM δίνει Accuracy 0.750 με όριο 0.5 στο predict_proba και 0.708 με predict() (train_models.py), ίδιο ROC-AUC 0.797.
+* Coimbra: Glucose στο top-5 σε 23/24 περιπτώσεις (8 μοντέλα x 3 τεχνικές), BMI σε 22/24. Resistin στο top-5 και των τριών τεχνικών σε όλα εκτός από τον Autoencoder (κυριαρχούν HOMA και Insulin).
+* Age: στο top-5 του permutation σε 7/8 μοντέλα, του SHAP σε 6/8, του LIME μόνο στο kNN. Δεν μπορώ να πω ποια τεχνική έχει δίκιο (24 δείγματα test).
+* RUSBoost (Coimbra): SHAP μη μηδενικό μόνο σε 3 χαρακτηριστικά, το 4ο-5ο της λίστας είναι ισοβαθμίες.
+* WDBC: τουλάχιστον ένα χαρακτηριστικό μεγέθους (radius/perimeter/area) στο top-5 του SHAP και των 8 μοντέλων. worst texture σε 7/8, worst concave points σε 6/8.
+
+Σημείωση: το SVM δίνει Accuracy 0.750 με όριο 0.5 στο predict\_proba και 0.708 με predict() (train\_models.py), ίδιο ROC-AUC 0.797.
 
 Περιορισμοί: μία εκτέλεση, χωρίς διακύμανση. Το Spearman σε 9 χαρακτηριστικά (Coimbra) είναι θορυβώδες. Δεν έχω ελέγξει τις τιμές του permutation για kNN και RUSBoost στο WDBC.
 
-## 11/10 - Ανάλυση αναπαραστάσεων με CKA (cka_analysis.py)
+## 11/10 - Ανάλυση αναπαραστάσεων με CKA (cka\_analysis.py)
 
 Linear CKA (Kornblith et al., ICML 2019) ανάμεσα σε στρώματα των MLP (1 και 2 κρυφά στρώματα), Autoencoder και TabNet, σε Coimbra και WDBC. Υπολογισμός σε όλα τα δείγματα (116 και 569), μοντέλα εκπαιδευμένα μόνο στο train. TabNet με early stopping σε 20% του train.
-Αποτελέσματα: results_cka/ (cka_all_layers_*.csv και .png, cka_mlp_seeds_*.csv).
+Αποτελέσματα: results\_cka/ (cka\_all\_layers\_*.csv και .png, cka\_mlp\_seeds\_*.csv).
 Έλεγχος ορθότητας: CKA(X,X)=1.000, περιστροφή+κλίμακα=1.000, τυχαίος θόρυβος 0.057 (Coimbra) και 0.013 (WDBC).
 
 Κλίμακα αναφοράς (MLP, 4 seeds): Coimbra μέσος 0.80 (0.67-0.91), WDBC μέσος 0.97 (0.96-0.98).
 
 Ευρήματα:
-- MLP: hidden1 μοιάζει με την είσοδο (0.84 Coimbra, 0.81 WDBC). Στο WDBC hidden1-hidden2 = 0.99 (το δεύτερο στρώμα δεν προσθέτει νέα γεωμετρία).
-- Autoencoder: bottleneck-είσοδος 0.88 (Coimbra, 7 νευρώνες) και 0.57 (WDBC, 3 νευρώνες). Έξοδος AE-MLP: 0.42 (Coimbra), 0.93 (WDBC).
-- TabNet: step1-step2 0.04 (Coimbra), 0.16 (WDBC). decision-έξοδος 0.96 και 0.94. Έξοδος MLP-TabNet 0.83 και 0.77.
+
+* MLP: hidden1 μοιάζει με την είσοδο (0.84 Coimbra, 0.81 WDBC). Στο WDBC hidden1-hidden2 = 0.99 (το δεύτερο στρώμα δεν προσθέτει νέα γεωμετρία).
+* Autoencoder: bottleneck-είσοδος 0.88 (Coimbra, 7 νευρώνες) και 0.57 (WDBC, 3 νευρώνες). Έξοδος AE-MLP: 0.42 (Coimbra), 0.93 (WDBC).
+* TabNet: step1-step2 0.04 (Coimbra), 0.16 (WDBC). decision-έξοδος 0.96 και 0.94. Έξοδος MLP-TabNet 0.83 και 0.77.
 
 Περιορισμοί: μία εκτέλεση. CKA πάνω σε όλα τα δείγματα, και σε αυτά που είδε το μοντέλο στην εκπαίδευση. Λίγες διαστάσεις στο bottleneck και στο TabNet. Για έξοδο 1 διάστασης το linear CKA = τετράγωνο συσχέτισης. Δεν εφαρμόζεται σε μοντέλα χωρίς στρώματα (kNN, SVM, Logistic Regression, RUSBoost, GRNN). Το CKA δεν λέει ποια αναπαράσταση είναι καλύτερη.
 Σημείωση: το TabNet με early stopping σε validation set έδωσε Accuracy 0.875 στο Coimbra σε αυτό το τρέξιμο (μία εκτέλεση, δεν χρησιμοποιείται).
+
+## 20/10 - Layer-wise Relevance Propagation (LRP) στο MLP (lrp\_analysis.py)
+
+LRP (Bach et al., PLOS ONE 2015) στο MLP με 1 και 2 κρυφά στρώματα, σε Coimbra και WDBC. Σημαντικότητα του logit της κλάσης 1, μέσος όρος των απόλυτων τιμών πάνω στα ίδια δείγματα test με SHAP και LIME (24 στο Coimbra, 40 από 114 στο WDBC).
+Κανόνες: LRP-epsilon και LRP-gamma (gamma=0.25 στα κρυφά στρώματα, epsilon στο πρώτο στρώμα, δική μου επιλογή).
+Αποτελέσματα: results\_lrp/ (CSV και γραφήματα).
+Έλεγχοι ορθότητας: διαφορά με predict\_proba <= 1.4e-17, διαφορά LRP-epsilon με Gradient x Input <= 2.7e-7 (γνωστή ταύτιση για δίκτυα ReLU, Ancona et al. ICLR 2018).
+
+Ευρήματα:
+
+* Coimbra: Glucose και Resistin πρώτες στο LRP. Συμφωνία με SHAP/LIME/permutation Spearman 0.52-0.75, 3 κοινά στο top-5. Το BMI είναι 6ο στο LRP και 3ο-4ο στις άλλες τεχνικές.
+* WDBC: και οι 4 τεχνικές δίνουν τα ίδια 5 χαρακτηριστικά (mean radius, worst smoothness, worst texture, worst perimeter, perimeter error), Spearman 0.80-0.92.
+* LRP-epsilon / LRP-gamma: Spearman 0.88 (Coimbra) και 1.00 (WDBC).
+* Βαθύτερο MLP: διαφορετική κατάταξη στο Coimbra εκτός από Glucose, Resistin. Στο WDBC 4 από 5 κοινά με το απλό MLP.
+
+Περιορισμοί: μία εκτέλεση, μόνο MLP. Το bias απορροφά μέρος της σημαντικότητας. Το LRP-epsilon ταυτίζεται με Gradient x Input. Οι απόλυτες τιμές του gamma δεν συγκρίνονται με του epsilon, μόνο η σειρά.
+
+## 20/10 - Layer-wise Relevance Propagation (LRP) στο MLP (lrp\_analysis.py)
+
+LRP (Bach et al., PLOS ONE 2015) στο MLP με 1 και 2 κρυφά στρώματα, σε Coimbra και WDBC. Σημαντικότητα του logit της κλάσης 1, μέσος όρος των απόλυτων τιμών πάνω στα ίδια δείγματα test με SHAP και LIME (24 στο Coimbra, 40 από 114 στο WDBC).
+Κανόνες: LRP-epsilon και LRP-gamma (gamma=0.25 στα κρυφά στρώματα, epsilon στο πρώτο στρώμα, δική μου επιλογή).
+Αποτελέσματα: results\_lrp/ (CSV και γραφήματα).
+Έλεγχοι ορθότητας: διαφορά με predict\_proba <= 1.4e-17, διαφορά LRP-epsilon με Gradient x Input <= 2.7e-7 (γνωστή ταύτιση για δίκτυα ReLU, Ancona et al. ICLR 2018).
+
+Ευρήματα:
+
+* Coimbra: Glucose και Resistin πρώτες στο LRP. Συμφωνία με SHAP/LIME/permutation Spearman 0.52-0.75, 3 κοινά στο top-5. Το BMI είναι 6ο στο LRP και 3ο-4ο στις άλλες τεχνικές.
+* WDBC: και οι 4 τεχνικές δίνουν τα ίδια 5 χαρακτηριστικά (mean radius, worst smoothness, worst texture, worst perimeter, perimeter error), Spearman 0.80-0.92.
+* LRP-epsilon / LRP-gamma: Spearman 0.88 (Coimbra) και 1.00 (WDBC).
+* Βαθύτερο MLP: διαφορετική κατάταξη στο Coimbra εκτός από Glucose, Resistin. Στο WDBC 4 από 5 κοινά με το απλό MLP.
+
+Περιορισμοί: μία εκτέλεση, μόνο MLP. Το bias απορροφά μέρος της σημαντικότητας. Το LRP-epsilon ταυτίζεται με Gradient x Input. Οι απόλυτες τιμές του gamma δεν συγκρίνονται με του epsilon, μόνο η σειρά.
+
