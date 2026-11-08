@@ -29,7 +29,7 @@ overfitting λόγω μικρού dataset (92 train samples)
 καθώς η τεχνική συμπίεσης αποδίδει συνήθως καλύτερα σε datasets με πολλά
 περισσότερα χαρακτηριστικά (π.χ. γονιδιακά δεδομένα), όχι σε 9 βιοδείκτες
 
-  ## TabNet (Deep Learning, built-in attention-based interpretability)
+## TabNet (Deep Learning, built-in attention-based interpretability)
 
 Ρυθμίσεις: n\_d=4, n\_a=4, n\_steps=2, batch\_size=16, patience=60
 (μικρή χωρητικότητα, προσαρμοσμένη για μικρό dataset)
@@ -160,19 +160,19 @@ LRP (Bach et al., PLOS ONE 2015) στο MLP με 1 και 2 κρυφά στρώ�
 
 Περιορισμοί: μία εκτέλεση, μόνο MLP. Το bias απορροφά μέρος της σημαντικότητας. Το LRP-epsilon ταυτίζεται με Gradient x Input. Οι απόλυτες τιμές του gamma δεν συγκρίνονται με του epsilon, μόνο η σειρά.
 
-## 20/10 - Layer-wise Relevance Propagation (LRP) στο MLP (lrp\_analysis.py)
+## 8/11 - Attention, LRP και CKA πριν και μετά την εκπαίδευση (before\_after\_analysis.py)
 
-LRP (Bach et al., PLOS ONE 2015) στο MLP με 1 και 2 κρυφά στρώματα, σε Coimbra και WDBC. Σημαντικότητα του logit της κλάσης 1, μέσος όρος των απόλυτων τιμών πάνω στα ίδια δείγματα test με SHAP και LIME (24 στο Coimbra, 40 από 114 στο WDBC).
-Κανόνες: LRP-epsilon και LRP-gamma (gamma=0.25 στα κρυφά στρώματα, epsilon στο πρώτο στρώμα, δική μου επιλογή).
-Αποτελέσματα: results\_lrp/ (CSV και γραφήματα).
-Έλεγχοι ορθότητας: διαφορά με predict\_proba <= 1.4e-17, διαφορά LRP-epsilon με Gradient x Input <= 2.7e-7 (γνωστή ταύτιση για δίκτυα ReLU, Ancona et al. ICLR 2018).
+Αίτημα επιβλέποντα (συνάντηση 23/10): εφαρμογή attention visualisation, LRP και CKA στα μοντέλα πριν και μετά την εκπαίδευση, με καταγραφή των αποτελεσμάτων. Έλεγχος ορθότητας τύπου τυχαιοποίησης παραμέτρων (Adebayo et al., NeurIPS 2018): αν η εξήγηση αλλάζει μετά την εκπαίδευση, προέρχεται από όσα έμαθε το μοντέλο.
+«Πριν» = ίδια αρχιτεκτονική και ίδιο seed με τα αρχικά τυχαία βάρη (sklearn: 1 epoch με learning rate 1e-12, TabNet: 1 epoch με learning rate 0, ενημερώνονται μόνο τα στατιστικά batch normalization). Attention: μόνο TabNet. LRP: MLP με ένα και με δύο κρυφά στρώματα. CKA: MLP, Autoencoder, TabNet. Coimbra και WDBC.
+Αποτελέσματα: results\_before\_after/ (CSV και γραφήματα).
 
 Ευρήματα:
 
-* Coimbra: Glucose και Resistin πρώτες στο LRP. Συμφωνία με SHAP/LIME/permutation Spearman 0.52-0.75, 3 κοινά στο top-5. Το BMI είναι 6ο στο LRP και 3ο-4ο στις άλλες τεχνικές.
-* WDBC: και οι 4 τεχνικές δίνουν τα ίδια 5 χαρακτηριστικά (mean radius, worst smoothness, worst texture, worst perimeter, perimeter error), Spearman 0.80-0.92.
-* LRP-epsilon / LRP-gamma: Spearman 0.88 (Coimbra) και 1.00 (WDBC).
-* Βαθύτερο MLP: διαφορετική κατάταξη στο Coimbra εκτός από Glucose, Resistin. Στο WDBC 4 από 5 κοινά με το απλό MLP.
+* Έλεγχος: το «πριν» MLP είναι στο επίπεδο της τύχης (Coimbra Accuracy 0.500, AUC 0.469, WDBC 0.404 και 0.411). Εξαίρεση το MLP(10,5) στο WDBC με AUC 0.777, γιατί τα χαρακτηριστικά του WDBC συσχετίζονται ισχυρά με την κλάση.
+* Attention (TabNet): Spearman πριν-μετά 0.033 (Coimbra) και -0.071 (WDBC). Μετά: Glucose, Resistin, BMI, HOMA, Age (Coimbra) και smoothness error, worst radius, worst perimeter, radius error, concave points error (WDBC). Εντροπία 1.84 → 1.67 (Coimbra, ομοιόμορφη 2.20) και 3.11 → 1.84 (WDBC, ομοιόμορφη 3.40).
+* LRP (MLP): Spearman πριν-μετά από -0.37 έως 0.15 και στα 4 μοντέλα. Τα «κοινά top-5» (3/5 και 4/5 στο Coimbra, 1/5 και 0/5 στο WDBC) είναι στο επίπεδο του τυχαίου (περίπου 2.8 με 9 χαρακτηριστικά, 0.8 με 30), άρα δεν τα χρησιμοποιώ. Το top-5 μετά στο Coimbra (Glucose, Resistin, Leptin, Age, Adiponectin) ταυτίζεται με την προηγούμενη εκτέλεση. Το άθροισμα των μέσων |LRP| μεγαλώνει (π.χ. 1.5 → 14.8 στο Coimbra).
+* CKA πριν-μετά και αναφορά (δύο τυχαίες αρχικοποιήσεις): Coimbra περίπου ίσα με την αναφορά (MLP κρυφό 1: 0.716 έναντι 0.702, bottleneck AE 0.674 έναντι 0.632). WDBC χαμηλότερα από την αναφορά στο κρυφό 1 (0.369 έναντι 0.512) και στο bottleneck (0.190 έναντι 0.337).
+* CKA εξόδων: πριν περίπου 0 μεταξύ μοντέλων, μετά 0.94 (MLP, MLP με δύο στρώματα) και 0.83 (MLP, TabNet) στο Coimbra, 0.95 και 0.77 στο WDBC.
+* WDBC μετά: τα κρυφά στρώματα των MLP έχουν CKA 0.99 μεταξύ τους.
 
-Περιορισμοί: μία εκτέλεση, μόνο MLP. Το bias απορροφά μέρος της σημαντικότητας. Το LRP-epsilon ταυτίζεται με Gradient x Input. Οι απόλυτες τιμές του gamma δεν συγκρίνονται με του epsilon, μόνο η σειρά.
-
+Περιορισμοί: μία εκτέλεση, ένας χωρισμός train/test, ένα seed για το «πριν». 24 δείγματα test στο Coimbra. Δεν υπάρχει αναφορά CKA για το TabNet και τα στρώματά του έχουν 4 διαστάσεις. Στο «πριν» heatmap το κρυφό 1 των δύο MLP βγαίνει 1.00 επειδή έχουν ίδιο seed και μέγεθος (ίδια αρχικά βάρη). Η κλίμακα του attention πριν και μετά δεν συγκρίνεται, μόνο η σειρά.
